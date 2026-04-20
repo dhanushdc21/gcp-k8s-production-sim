@@ -1,0 +1,7 @@
+project_id             = "k8s-prod-sim"
+region                 = "us-central1"
+zone                   = "us-central1-a"
+management_subnet_cidr = "10.0.0.0/24"
+workload_subnet_cidr   = "10.1.0.0/24"
+pods_cidr              = "10.2.0.0/16"
+services_cidr          = "10.3.0.0/16"
