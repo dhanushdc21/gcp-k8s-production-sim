@@ -30,3 +30,13 @@ module "vpc" {
   pods_cidr              = var.pods_cidr
   services_cidr          = var.services_cidr
 }
+
+module "nat" {
+  source  = "../../modules/nat"
+
+  project_id = var.project_id
+  region     = var.region
+  zone       = var.zone
+  network    = "management-vpc"
+  subnet     = "management-subnet"
+}

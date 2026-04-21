@@ -12,3 +12,8 @@ output "workload_subnet_id" {
   description = "The ID of the workload subnet"
   value       = module.vpc.workload_subnet_id
 }
+
+output "nat_gateway_ip" {
+  description = "Public IP of the NAT gateway"
+  value       = module.nat.nat_gateway_ip
+}
