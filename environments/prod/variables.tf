@@ -38,3 +38,15 @@ variable "services_cidr" {
   type        = string
   default     = "10.3.0.0/16"
 }
+
+variable "github_org" {
+  description = "GitHub username or organization"
+  type        = string
+  default     = "dhanushdc21"
+}
+
+variable "github_repo" {
+  description = "GitHub repository name"
+  type        = string
+  default     = "gcp-k8s-production-sim"
+}

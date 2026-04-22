@@ -17,3 +17,13 @@ output "nat_gateway_ip" {
   description = "Public IP of the NAT gateway"
   value       = module.nat.nat_gateway_ip
 }
+
+output "service_account_email" {
+  description = "GitHub Actions service account email"
+  value       = module.iam.service_account_email
+}
+
+output "workload_identity_provider" {
+  description = "Workload Identity Provider for GitHub Actions"
+  value       = module.iam.workload_identity_provider
+}

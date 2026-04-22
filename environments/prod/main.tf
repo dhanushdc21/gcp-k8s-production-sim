@@ -40,3 +40,11 @@ module "nat" {
   network    = "management-vpc"
   subnet     = "management-subnet"
 }
+
+module "iam" {
+  source = "../../modules/iam"
+
+  project_id  = var.project_id
+  github_org  = var.github_org
+  github_repo = var.github_repo
+}
