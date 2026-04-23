@@ -48,3 +48,16 @@ module "iam" {
   github_org  = var.github_org
   github_repo = var.github_repo
 }
+
+module "gke" {
+  source = "../../modules/gke"
+
+  project_id          = var.project_id
+  region              = var.region
+  zone                = var.zone
+  network             = "workload-vpc"
+  subnetwork          = "workload-subnet"
+  pods_range_name     = module.vpc.pods_range_name
+  services_range_name = module.vpc.services_range_name
+  cluster_name        = var.cluster_name
+}

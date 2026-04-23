@@ -27,3 +27,8 @@ output "workload_identity_provider" {
   description = "Workload Identity Provider for GitHub Actions"
   value       = module.iam.workload_identity_provider
 }
+
+output "cluster_name" {
+  description = "GKE cluster name"
+  value       = module.gke.cluster_name
+}

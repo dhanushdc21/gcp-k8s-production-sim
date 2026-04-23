@@ -50,3 +50,9 @@ variable "github_repo" {
   type        = string
   default     = "gcp-k8s-production-sim"
 }
+
+variable "cluster_name" {
+  description = "GKE cluster name"
+  type        = string
+  default     = "prod-cluster"
+}
