@@ -56,3 +56,4 @@ variable "cluster_name" {
   type        = string
   default     = "prod-cluster"
 }
+# triggered pipeline
