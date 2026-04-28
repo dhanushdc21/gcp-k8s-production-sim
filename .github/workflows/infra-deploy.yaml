@@ -57,10 +57,18 @@ jobs:
 
       - name: Terraform Plan
         working-directory: environments/prod
-        run: terraform plan
+        run: |
+          terraform plan \
+            -target=module.vpc \
+            -target=module.nat \
+            -target=module.gke
         if: github.event_name == 'pull_request'
 
       - name: Terraform Apply
         working-directory: environments/prod
-        run: terraform apply -auto-approve
+        run: |
+          terraform apply -auto-approve \
+            -target=module.vpc \
+            -target=module.nat \
+            -target=module.gke
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
