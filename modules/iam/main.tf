@@ -55,3 +55,18 @@ resource "google_storage_bucket_iam_member" "tfstate_access" {
   role   = "roles/storage.objectAdmin"
   member = "serviceAccount:${google_service_account.github_actions.email}"
 }
+
+resource "google_project_iam_member" "github_actions_extra_roles" {
+  for_each = toset([
+    "roles/compute.networkAdmin",
+    "roles/compute.instanceAdmin.v1",
+    "roles/container.admin",
+    "roles/iam.securityAdmin",
+    "roles/iam.workloadIdentityPoolAdmin",
+    "roles/storage.objectAdmin",
+  ])
+
+  project = var.project_id
+  role    = each.value
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
