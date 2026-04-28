@@ -58,3 +58,4 @@ variable "cluster_name" {
 }
 # triggered pipeline
 # fix storage permissions
+# retrigger
