@@ -49,3 +49,9 @@ resource "google_service_account_iam_member" "github_actions_wif" {
   role               = "roles/iam.workloadIdentityUser"
   member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github_pool.name}/attribute.repository/${var.github_org}/${var.github_repo}"
 }
+
+resource "google_storage_bucket_iam_member" "tfstate_access" {
+  bucket = "${var.project_id}-tfstate"
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.github_actions.email}"
+}

@@ -57,3 +57,4 @@ variable "cluster_name" {
   default     = "prod-cluster"
 }
 # triggered pipeline
+# fix storage permissions
