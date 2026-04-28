@@ -1,0 +1,39 @@
+name: Teardown Infrastructure
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 18 * * *'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  teardown:
+    name: Destroy All Infrastructure
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.SA_EMAIL }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.0
+
+      - name: Terraform Init
+        working-directory: environments/prod
+        run: terraform init
+
+      - name: Terraform Destroy
+        working-directory: environments/prod
+        run: terraform destroy -auto-approve

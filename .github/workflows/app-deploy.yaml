@@ -1,0 +1,71 @@
+name: App Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/**'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    name: Build, Scan & Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    env:
+      PROJECT_ID: k8s-prod-sim
+      REGION: us-central1
+      REPO: k8s-prod-sim-repo
+      IMAGE: f1-telemetry-app
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.SA_EMAIL }}
+
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}:${{ github.sha }} \
+            -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}:latest \
+            ./apps/${{ env.IMAGE }}
+
+      - name: Run Trivy image scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}:${{ github.sha }}
+          severity: CRITICAL
+          exit-code: 1
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}:${{ github.sha }}
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}:latest
+
+      - name: Setup kubectl
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: prod-cluster
+          location: us-central1-a
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Deploy to GKE
+        run: |
+          kubectl set image deployment/${{ env.IMAGE }} \
+            ${{ env.IMAGE }}=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}:${{ github.sha }} \
+            -n production
+          kubectl rollout status deployment/${{ env.IMAGE }} -n production
