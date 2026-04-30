@@ -1,0 +1,20 @@
+replicaCount: 1
+
+image:
+  repository: us-central1-docker.pkg.dev/k8s-prod-sim/k8s-prod-sim-repo/f1-telemetry-app
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 8080
+
+namespace: production
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
