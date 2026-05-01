@@ -47,7 +47,8 @@ Trigger the `Teardown Infrastructure` workflow from GitHub Actions.
 ![Monitoring Dashboard](docs/images/dashboard.png)
 
 ### GitHub Actions Pipeline
-![CI/CD Pipeline](docs/images/pipeline.png)
+![CI/CD Pipeline Steps](docs/images/pipeline1.png)
+![CI/CD Pipeline Success](docs/images/pipeline2.png)
 
 ### Live F1 Data
 ![F1 Telemetry Output](docs/images/f1-output.png)
