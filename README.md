@@ -36,3 +36,18 @@ Full cluster + app restored in ~12 minutes.
 
 ## Tear it down
 Trigger the `Teardown Infrastructure` workflow from GitHub Actions.
+
+## Architecture
+
+![Architecture Diagram](docs/images/architecture.jpg)
+
+## Screenshots
+
+### Cloud Monitoring Dashboard
+![Monitoring Dashboard](docs/images/dashboard.png)
+
+### GitHub Actions Pipeline
+![CI/CD Pipeline](docs/images/pipeline.png)
+
+### Live F1 Data
+![F1 Telemetry Output](docs/images/f1-output.png)
